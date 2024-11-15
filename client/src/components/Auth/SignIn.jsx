@@ -1,8 +1,8 @@
 // Import necessary React modules
-import React, { useState , useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { ProjectsContext } from "../../contexts/ProjectsProvider";
-  // Function to handle login
-  import { useNavigate , Link} from 'react-router-dom'; // Import useNavigate
+// Function to handle login
+import { useNavigate, Link } from 'react-router-dom'; // Import useNavigate
 // Functional component for the Login component
 const SignIn = () => {
   // State to store the user input for email, password, and Remember Me
@@ -10,42 +10,42 @@ const SignIn = () => {
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const { setUser ,setToken } = useContext(ProjectsContext);// Get the setUser function from UserContext
+  const { setUser, setToken } = useContext(ProjectsContext);// Get the setUser function from UserContext
 
 
-// Inside your component
-const navigate = useNavigate(); // Get the navigate function
+  // Inside your component
+  const navigate = useNavigate(); // Get the navigate function
 
-const handleLogin = async (email, password) => {
+  const handleLogin = async (email, password) => {
     try {
-        const response = await fetch('http://localhost:5200/api/signin', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ email, password }),
-        });
+      const response = await fetch('http://localhost:5200/api/signin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-        const data = await response.json();
-if (response.ok) {
-    // If the login was successful, store the user data in the UserContext
-    console.log(data);
-    setUser(data.user);
-    setToken(data.token)
-    alert('Login successful!');
-    
-    // Redirect to "/"
-    navigate('/');
-} else {
-    // If the response was not successful, throw an error
-    throw new Error(data.error);
-}
+      const data = await response.json();
+      if (response.ok) {
+        // If the login was successful, store the user data in the UserContext
+        console.log(data);
+        setUser(data.user);
+        setToken(data.token)
+        alert('Login successful!');
+
+        // Redirect to "/"
+        navigate('/');
+      } else {
+        // If the response was not successful, throw an error
+        throw new Error(data.error);
+      }
     } catch (error) {
-        // Handle error
-        console.error(error);
-        alert(`Login failed: ${error.message}`);
+      // Handle error
+      console.error(error);
+      alert(`Login failed: ${error.message}`);
     }
-};
+  };
 
   return (
     <div className="flex items-center justify-center h-screen">
@@ -125,11 +125,11 @@ if (response.ok) {
           <span className="text-gray-600">Remember me</span>
         </div>
         <button
-            type="button"
-            onClick={() => handleLogin(email, password)}
-            className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 w-full"
+          type="button"
+          onClick={() => handleLogin(email, password)}
+          className="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-700 w-full"
         >
-            Login
+          Login
         </button>
         <div className="text-center mt-4">
           <Link to='/forgetpass' className="text-teal-500 hover:underline">

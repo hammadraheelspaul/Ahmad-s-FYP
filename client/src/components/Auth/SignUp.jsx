@@ -1,4 +1,4 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { ProjectsContext } from "../../contexts/ProjectsProvider";
 
@@ -10,11 +10,11 @@ const Signup = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [address, setAddress] = useState('');
-const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsChecked, setTermsChecked] = useState(false);
   const { setUser } = useContext(ProjectsContext);
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
 
 
@@ -26,13 +26,13 @@ const [phone, setPhone] = useState('');
     }
 
     try {
-   const response = await axios.post('http://localhost:5200/api/signup', {
-  name: uName,
-  email,
-  password,
-  address, // add this
-  phone, // and this
-});
+      const response = await axios.post('http://localhost:5200/api/signup', {
+        name: uName,
+        email,
+        password,
+        address, // add this
+        phone, // and this
+      });
       // If the signup was successful, save the username and email in the state
       setUser({ username: uName, email });
 
@@ -97,25 +97,25 @@ const [phone, setPhone] = useState('');
           />
         </label>
         <label className="block mb-4">
-  <input
-    type="text"
-    value={address}
-    onChange={(e) => setAddress(e.target.value)}
-    className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
-    placeholder="Address"
-    required
-  />
-</label>
-<label className="block mb-4">
-  <input
-    type="tel"
-    value={phone}
-    onChange={(e) => setPhone(e.target.value)}
-    className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
-    placeholder="Phone"
-    required
-  />
-</label>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            placeholder="Address"
+            required
+          />
+        </label>
+        <label className="block mb-4">
+          <input
+            type="tel"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            className="w-full border border-gray-300 rounded py-2 px-3 focus:outline-none focus:border-blue-500"
+            placeholder="Phone"
+            required
+          />
+        </label>
         <label className="flex items-center mb-4">
           <input
             type="checkbox"
@@ -134,9 +134,8 @@ const [phone, setPhone] = useState('');
           type="button"
           onClick={handleSignup}
           disabled={!termsChecked}
-          className={`${
-            termsChecked ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-300 cursor-not-allowed'
-          } text-white px-4 py-2 rounded w-full`}
+          className={`${termsChecked ? 'bg-green-500 hover:bg-green-700' : 'bg-gray-300 cursor-not-allowed'
+            } text-white px-4 py-2 rounded w-full`}
         >
           Sign Up
         </button>

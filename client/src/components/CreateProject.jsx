@@ -48,7 +48,7 @@ const handleSubmit = async (e) => {
         imageUrl : project.imageUrl
     };
     try {
-        const response = await axios.post('http://localhost:5200/api/api/projects', finalProject);
+        const response = await axios.post('http://localhost:5200/api/projects', finalProject);
         setProject({
             name: '',
             projectDetails: {

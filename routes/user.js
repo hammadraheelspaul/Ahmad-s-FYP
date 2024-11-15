@@ -12,13 +12,17 @@ const {
   backProject
 } = require('../controllers/user');
 
+const userController = require('../controllers/user');
 
 
-router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
-  res.json({
-    user: req.profile,
-  });
-});
+// router.get('/secret/:userId', requireSignin, isAuth, isAdmin, (req, res) => {
+//   res.json({
+//     user: req.profile,
+//   });
+// });
+
+router.post('/requestPasswordReset/', userController.requestReset);
+router.put('/resetPassword/',userController.resetPassword );
 
 router.get('/user/:userId',  read);
 router.put('/user/:userId',  update);

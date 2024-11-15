@@ -35,12 +35,13 @@ useEffect(() => {
   }, [user]);
 
   const [compaignProject, setCompaignProject] = useState(null);
+  
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         const response = await axios.get("http://localhost:5200/api/projects");
         setProjects(response.data);
-        console.log(response.data);
+        // console.log(response.data);
       } catch (error) {
         console.error(error);
       }

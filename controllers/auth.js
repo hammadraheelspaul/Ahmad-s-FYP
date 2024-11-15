@@ -33,7 +33,7 @@ exports.signin = (req, res) => {
       });
     }
     // if user found make sure the email and password match
-    // create authenticate method in user model
+    // create authenticate method in user model 
     if (!user.authenticate(password)) {
       return res.status(401).json({
         error: "Email and password didn't match",
@@ -51,6 +51,7 @@ exports.signin = (req, res) => {
     return res.json({ token, user: { _id, email, name, role } });
   });
 };
+
 
 exports.signout = (req, res) => {
   res.clearCookie('t');

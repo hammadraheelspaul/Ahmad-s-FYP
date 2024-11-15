@@ -7,7 +7,7 @@ import { logo } from "../assets/";
 
 const Hero = () => {
   return (
-    <div className="relative bg-white mt-2 text-white h-screen w-full overflow-hidden">
+    <div className="relative bg-white text-white h-screen w-full overflow-hidden">
       <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center z-40">
         <img src={logo} className="w-32 mb-4 mx-auto" alt="Leep" />
         <h1 className="text-3xl md:text-5xl font-extrabold text-gray-800 mb-4 leading-tight">

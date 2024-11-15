@@ -39,8 +39,6 @@ exports.update = (req, res) => {
   );
 };
 
-
-
 exports.changePreferences = (req, res) => {
   const { coffeePreferences, brewingMethods, equipmentPreferences } = req.body;
 
@@ -60,8 +58,6 @@ exports.changePreferences = (req, res) => {
     }
   );
 };
-
-
 
 exports.likeProject = async (req, res) => {
   const user = await User.findById(req.params.userId);
@@ -97,7 +93,6 @@ exports.addComment = async (req, res) => {
   res.status(200).send(project);
 };
 
-
 exports.backProject = async (req, res) => {
   const user = await User.findById(req.params.userId);
   const project = await Project.findById(req.params.projectId);
@@ -116,3 +111,41 @@ exports.backProject = async (req, res) => {
 
   res.status(200).send({ user, project });
 };
+
+exports.requestReset = async (req, res) =>{
+  
+  const userId = req.body.userId;
+  console.log(userId);
+  if(!userId){
+    return res.status(400).send('Bad Request');
+  }
+  const user = await User.findOne({email: userId});
+  if(!user){
+    return res.status(403).send("Invalid email");
+  }
+  return res.status(200).send("Permission Granted");
+}
+
+exports.resetPassword = async (req, res) =>{
+  const { email, password } = req.body;
+
+  try {
+    // Find user by email
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Set and encrypt the new password
+    user.password = password;  // This triggers the virtual field 'password' setter and hashes the password
+
+    // Save the updated user
+    await user.save();
+
+    res.json({ message: 'Password has been reset successfully' });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ error: 'An error occurred while resetting the password' });
+  }
+  
+}

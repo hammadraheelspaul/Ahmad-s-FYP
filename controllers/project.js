@@ -1,9 +1,30 @@
 const Project = require('../models/project');
 
 exports.createProject = async (req, res) => {
-  const project = new Project(req.body);
+  const { compaignProject, createdBy } = req.body;
+  // console.log(compaignProject);
+
+  const { title, tagline, imageUrl,
+    location, country, category,
+    neededAmount,
+    tags, duration, endDate, perks, faqs, story } = compaignProject;
+
+  // console.log(title, tagline, imageUrl,
+  //   location, country, category,
+  //   tags, duration, endDate, createdBy);
+
+  const project = new Project({
+    title, tagline, imageUrl,
+    location, country, category,
+    neededAmount,
+    tags, duration, endDate, createdBy, projectDetails: { media: [], perks, FAQs: faqs, story }
+  });
+  // console.log(project);
+
   await project.save();
+
   res.status(201).send(project);
+  // res.status(200).send();
 };
 
 exports.getProjects = async (req, res) => {
@@ -28,7 +49,6 @@ exports.deleteProject = async (req, res) => {
   if (!project) return res.status(404).send('Project not found');
   res.status(204).send();
 };
-
 
 exports.getProjectRewards = async (req, res) => {
   const rewards = await Reward.find({ project: req.params.projectId });

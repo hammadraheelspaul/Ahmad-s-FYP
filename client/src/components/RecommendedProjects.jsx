@@ -5,7 +5,7 @@ import { ProjectsContext } from "../contexts/ProjectsProvider";
 
 const RecommendedProjects = () => {
   const { projects } = useContext(ProjectsContext);
-  console.log(projects)
+  // console.log(projects);
   const recommendedProjects = projects.filter(project => project.isRecommended);
 
   return (

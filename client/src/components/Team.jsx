@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Team = () => {
+const Team = ({setActiveTab, setFillStatus}) => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [dob, setDob] = useState('');
@@ -8,15 +8,40 @@ const Team = () => {
   const [country, setCountry] = useState('');
   const [streetAddress, setStreetAddress] = useState('');
   const [emailAddress, setEmailAddress] = useState('');
+
+  const [showEmailInValidMessage, setShowEmailInValidMessage] = useState(false);
   const [savedInfo, setSavedInfo] = useState(null);
 
   const handleSaveInfo = () => {
     setSavedInfo({ firstName, lastName, dob, phoneNumber, country, streetAddress, emailAddress });
   };
 
+  const handleSave = () =>{
+
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if(firstName && lastName && dob
+      && phoneNumber && country
+      && streetAddress && emailAddress){
+
+        if (emailPattern.test(emailAddress)) {
+          alert("Information Saved");
+          setFillStatus(4)
+        }
+        else {
+          setShowEmailInValidMessage(true);
+          setTimeout(() => {
+            setShowEmailInValidMessage(false)
+          }, 3000);
+        }
+      }
+      else{
+        alert("Please fill all the fields!");
+      }
+  }
   return (
     <div>
-      
+
       <div className="team-container">
         <h1 className="title">Contact Information</h1>
         <h1 className="subtitle">
@@ -85,18 +110,22 @@ const Team = () => {
         </h1>
 
         <div>
+          {
+            showEmailInValidMessage &&
+            <div className='text-red-500 font-bold animate-pulse'>Invalid Email Address</div>
+          }
           <input
             type="text"
             placeholder="Email Address"
             value={emailAddress}
             onChange={(e) => setEmailAddress(e.target.value)}
-            className="input"
+            className={`input rounded border ${showEmailInValidMessage && 'text-red-500 border-red-500 border-2 animate-pulse'}`}
           />
         </div>
 
-        <button onClick={handleSaveInfo} className="save-button">
+        {/* <button onClick={handleSaveInfo} className="save-button">
           Save Info
-        </button>
+        </button> */}
       </div>
 
       <style>
@@ -152,6 +181,21 @@ const Team = () => {
           }
         `}
       </style>
+
+      <div className="flex justify-center">
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
+          onClick={handleSave}
+        >
+          Save
+        </button>
+        {/* <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
+          onClick={handleSave}
+        >
+          Save
+        </button> */}
+      </div>
 
     </div>
   );

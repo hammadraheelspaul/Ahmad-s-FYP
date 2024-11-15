@@ -37,7 +37,7 @@ const HomePage = () => {
           </p>
 
           <div className="flex justify-center mt-4 p-3">
-            <Link to="/add-projects">
+            <Link to="/Campaign">
               <button className="bg-green-600 text-white font-bold px-8 py-4 mx-2 rounded-md shadow-md hover:bg-gray-200 focus:outline-none focus:ring focus:border-blue-300 transition duration-300 ease-in-out">
                 Start CrowdFunding
               </button>
@@ -45,7 +45,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
-      <RecommendedProjects />
+      {/* <RecommendedProjects /> */}
       <NewProjects />
 
       <Footer />

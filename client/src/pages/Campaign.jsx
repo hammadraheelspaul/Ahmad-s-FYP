@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Navbar } from "../components";
 import { TypeAnimation } from "react-type-animation";
 import Footer from "../components/Footer";
@@ -7,34 +7,62 @@ import Content from "../components/Content";
 import Team from "../components/Team";
 import Perks from "../components/Perks";
 import Basics from "../components/Basics";
-import { ProjectsContext } from "../contexts/ProjectsProvider";
 import axios from 'axios'
+
+import { logo } from '../assets'
+import vrPerson from '../assets/vr.png'
+
+import { ProjectsContext } from "../contexts/ProjectsProvider";
+import LoggeInRequired from "../components/logginRequired";
+
+
 const Campaign = () => {
-  const [activeTab, setActiveTab] = useState("Perks");
-const { compaignProject } = useContext(ProjectsContext);
+  
+  const { compaignProject, setCompaignProject, user } = useContext(ProjectsContext);
+
+  // useEffect(() => {
+  //   console.log(user );
+  // }, [user ]);
+  
+  const [activeTab, setActiveTab] = useState("Basics");
+  const [fillStatus, setFillStatus] = useState([]);
+
+  // useEffect(() => {
+  //   console.log(activeTab, fillStatus);
+  // }, [activeTab, fillStatus]);
+  
+
   const handleTabClick = (tabName) => {
     setActiveTab(tabName);
   };
 
-const handleSubmit = () => {
-    axios.post('http://localhost:5200/api/projects', compaignProject)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-};
+  const handleSubmit = () => {
+    
+    if(fillStatus.includes(0) && fillStatus.includes(1) && fillStatus.includes(2))
+    {
 
-const handleSave = () => {
+      axios.post('http://localhost:5200/api/projects', {compaignProject, createdBy: user._id})
+      .then(response => {
+        // console.log(response.data);
+        // setCompaignProject({});
+        alert("Project Added Successfully!");
+        
+      })
+      .catch(error => {
+        console.error(error);
+      });
+    }
+  };
+
+  const handleSave = () => {
     axios.put(`http://localhost:5200/api/projects/${compaignProject.id}`, compaignProject)
-        .then(response => {
-            console.log(response.data);
-        })
-        .catch(error => {
-            console.error(error);
-        });
-};
+      .then(response => {
+        console.log(response.data);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  };
   const stats = [
     { name: "Easy Setup" },
     { name: "Engage Your Audience" },
@@ -42,6 +70,14 @@ const handleSave = () => {
     { name: "Transparent Tracking" },
     { name: "Expert support" },
   ];
+
+  // protecting the page :)
+  // please do not curse me for this. The budget and the time was kinda low.
+  if(!user){
+    return(
+      <LoggeInRequired />
+    )
+  }
 
   return (
     <div>
@@ -105,67 +141,81 @@ const handleSave = () => {
         </div>
       </div>
 
-      <div className="flex justify-center p-4">
-        <button
-          className={` rounded-full ${
-            activeTab === "Basics"
-              ? "bg-teal-500 z-10 text-white"
-              : "border border-gray-100 text-black"
-          } -ml-2 px-10 py-3 text-lg `}
-          onClick={() => handleTabClick("Basics")}
-        >
-          Basics
-        </button>
-        <button
-          className={`rounded-full ${
-            activeTab === "Perks"
-              ? "bg-teal-500 z-10 text-white"
-              : "border border-gray-100 text-black"
-          } -mr-2 px-10 py-3 text-lg `}
-          onClick={() => handleTabClick("Perks")}
-        >
-          Perks
-        </button>
-        <button
-          className={` rounded-full ${
-            activeTab === "Content"
-              ? "bg-teal-500 z-10 text-white"
-              : "border border-gray-100 text-black"
-          } -mx-2 px-10 py-3 text-lg `}
-          onClick={() => handleTabClick("Content")}
-        >
-          Content
-        </button>
-        <button
-          className={` rounded-full ${
-            activeTab === "Team"
-              ? "bg-teal-500 z-10 text-white"
-              : "border border-gray-100 text-black"
-          } -ml-2 px-10 py-3 text-lg `}
-          onClick={() => handleTabClick("Team")}
-        >
-          Team
-        </button>
+      <div className="flex">
+
+        <div className="w-1/2">
+          <div className="flex justify-center space-x-3 my-3">
+            <button
+              className={` rounded-full ${activeTab === "Basics"
+                ? "bg-teal-500 z-10 text-white"
+                : "border border-gray-100 text-black"
+                }  px-10 py-3 text-lg `}
+              onClick={() => handleTabClick("Basics")}
+            >
+              Basics
+            </button>
+            <button
+              className={`rounded-full ${activeTab === "Perks"
+                ? "bg-teal-500 z-10 text-white"
+                : "border border-gray-100 text-black"
+                }  px-10 py-3 text-lg `}
+              onClick={() => handleTabClick("Perks")}
+            >
+              Perks
+            </button>
+            <button
+              className={` rounded-full ${activeTab === "Content"
+                ? "bg-teal-500 z-10 text-white"
+                : "border border-gray-100 text-black"
+                }  px-10 py-3 text-lg `}
+              onClick={() => handleTabClick("Content")}
+            >
+              Content
+            </button>
+            {/* <button
+              className={` rounded-full ${activeTab === "Team"
+                ? "bg-teal-500 z-10 text-white"
+                : "border border-gray-100 text-black"
+                }  px-10 py-3 text-lg `}
+              onClick={() => handleTabClick("Team")}
+            >
+              Team
+            </button> */}
+          </div>
+
+          {activeTab === "Basics" && <Basics setActiveTab = {setActiveTab} fillStatus={fillStatus} setFillStatus = {setFillStatus}/>}
+          {activeTab === "Perks" && <Perks setActiveTab = {setActiveTab} fillStatus={fillStatus} setFillStatus = {setFillStatus}/>}
+          {activeTab === "Content" && <Content setActiveTab = {setActiveTab} fillStatus={fillStatus} setFillStatus = {setFillStatus}/>}
+          {/* {activeTab === "Team" && <Team setActiveTab = {setActiveTab} setFillStatus = {setFillStatus}/>} */}
+
+          <div className="flex justify-center">
+            <button
+              className={` text-white font-bold py-2 px-4 rounded m-2 ${fillStatus.includes(0) && fillStatus.includes(1) && fillStatus.includes(2) ? 'bg-blue-500 hover:bg-blue-700': 'bg-slate-500'}`}
+              onClick={handleSubmit}
+            >
+              Submit
+            </button>
+            {/* <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
+              onClick={handleSave}
+            >
+              Save
+            </button> */}
+          </div>
+          
+        </div>
+
+        {/* for image */}
+        <div className='w-1/2 h-[80vh] bg-teal-500'>
+          <img src={logo} alt='leep' className='ml-auto' />
+          <img src={vrPerson} alt='jeje' className="mx-auto h-1/2" />
+          <h1 className='text-center text-4xl font-bold uppercase text-white -translate-y-5'>Take a LEEP, Build your dreams</h1>
+        </div>
+
       </div>
-      {activeTab === "Perks" && <Perks />}
-      {activeTab === "Content" && <Content />}
-      {activeTab === "Team" && <Team />}
-      {activeTab === "Basics" && <Basics />}
-      <div className="flex justify-center">
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
-          onClick={handleSubmit}
-        >
-          Submit
-        </button>
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded m-2"
-          onClick={handleSave}
-        >
-          Save
-        </button>
-      </div>
+
       <Footer />
+
     </div>
   );
 };

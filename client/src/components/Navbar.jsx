@@ -13,7 +13,7 @@ const Header = () => {
   };
 
   return (
-    <div className="bg-gray-900 p-2 rounded-lg sticky top-0 z-[99999999999999] shadow-lg">
+    <div className="bg-gray-900 p-2  sticky top-0 z-[99999999999999] shadow-lg">
       <div className="container mx-auto flex justify-between items-center py-4">
         <div className="font-mono font-extrabold text-[16px] hidden md:flex space-x-4 text-white">
           {/* Navigation links */}
@@ -23,9 +23,9 @@ const Header = () => {
           <Link to="/" className="hover:text-teal-500 uppercase">
             Projects
           </Link>
-          <Link to="/add-projects" className="hover:text-teal-500 uppercase">
+          {/* <Link to="/add-projects" className="hover:text-teal-500 uppercase">
             Add Projects
-          </Link>
+          </Link> */}
           <Link to="/Campaign" className="hover:text-teal-500 uppercase">
             Campaign
           </Link>
@@ -46,7 +46,7 @@ const Header = () => {
         <div className="flex items-center text-white">
           {/* Search input */}
           <input
-            className="outline-none px-1 py-1 rounded-l-lg bg-gray-100 text-gray-800"
+            className="outline-none px-2 py-1 rounded-l-lg bg-gray-100 text-gray-800"
             type="text"
             placeholder="Search"
             value={searchQuery}
@@ -62,7 +62,7 @@ const Header = () => {
           <div className="relative">
             {user ? (
               <div className="font-mono font-extrabold text-[16px] uppercase text-teal-500 px-3">
-                <span>HI{user.name}</span>
+                <span>HI {user.name}</span>
                 <button
                   className="absolute -right-10 mt-6 w-[100px] text-xs text-teal-500 rounded hover:bg-red-700 transition duration-200 ease-in-out"
                   onClick={() => setUser(null)}
@@ -114,12 +114,12 @@ const Header = () => {
         >
           Projects
         </Link>
-        <Link
+        {/* <Link
           to="/add-projects"
           className="block px-4 py-2 text-lg font-medium hover:bg-gray-800 text-white"
         >
           Add Projects
-        </Link>
+        </Link> */}
         <Link
           to="/campaign"
           className="block px-4 py-2 text-lg font-medium hover:bg-gray-800 text-white"

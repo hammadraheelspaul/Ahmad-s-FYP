@@ -1,53 +1,71 @@
-import React, { useState , useContext} from 'react';
+import React, { useState, useContext } from 'react';
 import { ProjectsContext } from '../contexts/ProjectsProvider';
 import axios from 'axios'
-const Basics = () => {
-    const [campaignDetails, setCampaignDetails] = useState({
-        title: '',
-        tagline: '',
-        imageUrl: '',
-        location: '',
-        category: '',
-        tags: '',
-        duration: ''
 
+
+
+const Basics = ({setActiveTab, fillStatus, setFillStatus}) => {
+    
+    const { setCompaignProject, compaignProject } = useContext(ProjectsContext);
+    
+    // Prefilling the form if it alredy filled.
+    // It will get reset upon successfull compaign submission.
+    // Check handleSubmit in Campaign.jsx.
+    const [campaignDetails, setCampaignDetails] = useState({
+        title: compaignProject?.title? compaignProject.title : "",
+        tagline: compaignProject?.tagline? compaignProject.tagline : "",
+        imageUrl: compaignProject?.imageUrl? compaignProject.imageUrl : "",
+        location: compaignProject?.location? compaignProject.location : "",
+        country: compaignProject?.country? compaignProject.country : "",
+        category: compaignProject?.category? compaignProject.category : "",
+        tags: compaignProject?.tags? compaignProject.tags : "",
+        duration: compaignProject?.duration? compaignProject.duration : "",
+        neededAmount: compaignProject?.neededAmount? compaignProject.neededAmount : 0
     });
-const [endDate, setEndDate] = useState(null);
+
+    const [endDate, setEndDate] = useState(compaignProject?.endDate? compaignProject.endDate : "");
 
     const [successMessage, setSuccessMessage] = useState('');
-    const {setCompaignProject ,compaignProject } = useContext(ProjectsContext)
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
         setCampaignDetails({ ...campaignDetails, [name]: value });
+
     };
 
-   const handleImageChange = (e) => {
-    const formData = new FormData();
-    formData.append('file', e.target.files[0]);
-    formData.append('upload_preset', 'leep212'); // Replace with your upload preset
+    const handleImageChange = (e) => {
+        const formData = new FormData();
+        formData.append('file', e.target.files[0]);
+        formData.append('upload_preset', 'leep212'); // Replace with your upload preset
 
-    axios.post('https://api.cloudinary.com/v1_1/dccckfgjb/image/upload', formData) // Replace with your Cloudinary cloud name
-        .then(response => {
-            const imageUr = response.data.secure_url;
-            console.log(imageUr)
-            setCampaignDetails({ ...campaignDetails, imageUrl: imageUr });
-        })
-        .catch(err => {
-            console.error(err);
-        });
-};
-const handleSubmit = async (e) => {
-    e.preventDefault();
+        axios.post('https://api.cloudinary.com/v1_1/dccckfgjb/image/upload', formData) // Replace with your Cloudinary cloud name
+            .then(response => {
+                const imageUr = response.data.secure_url;
+                console.log(imageUr)
+                setCampaignDetails({ ...campaignDetails, imageUrl: imageUr });
+            })
+            .catch(err => {
+                console.error(err);
+            });
+    };
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    // Add endDate to campaignDetails
-    const updatedCampaignDetails = { ...campaignDetails, endDate };
+        // Add endDate to campaignDetails
+        const updatedCampaignDetails = { ...campaignDetails, endDate };
 
-    if (compaignProject) {
-        setCompaignProject({ ...compaignProject, ...updatedCampaignDetails });
-    } else {
-        setCompaignProject(updatedCampaignDetails);
-    }
-};
+        if (compaignProject) {
+            setCompaignProject({ ...compaignProject, ...updatedCampaignDetails });
+        } else {
+            setCompaignProject(updatedCampaignDetails);
+        }
+
+        setSuccessMessage('Information Saved');
+        setFillStatus([...fillStatus, 0]);
+        setTimeout(() => {
+            setActiveTab("Perks");
+        }, 1000); //auto switching tab.
+    };
 
     return (
         <>
@@ -55,8 +73,7 @@ const handleSubmit = async (e) => {
                 body {
                     font-family: Arial, sans-serif;
                     background-color: #f9f9f9;
-                    margin: 0;
-                    padding: 20px;
+                    margin: 0;               
                     box-sizing: border-box;
                 }
 
@@ -240,7 +257,7 @@ const handleSubmit = async (e) => {
                 <div className="section-description">
                     Craft a compelling introduction: Outline the objectives of your campaign to captivate potential supporters and pique their curiosity. This foundational information plays a crucial role in defining your campaign's identity, shaping its presence on your campaign page, card, and in search results. Engage your audience from the start, inviting them to delve deeper into your cause and discover how they can contribute to its success.
                 </div>
-                
+
             </div>
             <form className="campaign-form" onSubmit={handleSubmit}>
                 <div className="form-group">
@@ -272,7 +289,17 @@ const handleSubmit = async (e) => {
                 <div className="form-group">
                     <label>Campaign Card Image *</label>
                     <label className="upload-box" htmlFor="image-upload">
-                        {campaignDetails.image ? campaignDetails.image.name : "UPLOAD IMAGE"}
+                        {
+                            campaignDetails.imageUrl?
+                            <div>
+                                <img src= {campaignDetails.imageUrl} alt="image" />
+                            </div>
+                            
+                            :
+                            <div>
+                                UPLOAD IMAGE
+                            </div>
+                        }
                     </label>
                     <input
                         id="image-upload"
@@ -369,15 +396,30 @@ const handleSubmit = async (e) => {
                     />
                     <small>Enter up to five keywords that best describe your campaign.</small>
                 </div>
+
                 <div className="form-group">
-                    <label>Campaign Duration *</label>
-                <input
-    type="date"
-    name="endDate"
-    onChange={(e) => setEndDate(e.target.value)}
-    required
-/>
-</div>
+                    <label>Amount Needed *</label>
+                    <input
+                        type="number"
+                        name="neededAmount"
+                        value={campaignDetails.neededAmount}
+                        onChange={handleChange}
+                        placeholder="Enter the amount you are looking to raise."
+                        required
+                    />
+                    <small>Enter up to five keywords that best describe your campaign.</small>
+                </div>
+
+                <div className="form-group">
+                    <label>Campaign End Date *</label>
+                    <input
+                        type="date"
+                        name="endDate"
+                        value={endDate}
+                        onChange={(e) => setEndDate(e.target.value)}
+                        required
+                    />
+                </div>
 
 
                 <div className="form-group">

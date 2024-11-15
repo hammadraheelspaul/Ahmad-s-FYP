@@ -11,21 +11,25 @@ const NewProjects = () => {
 
   return (
     <div className="bg-gray-800 p-10 border border-gray-300 rounded-xl shadow-lg">
+
       <h2 className="text-3xl text-white text-center font-semibold uppercase mb-6">
-        New Projects
+        All Projects
       </h2>
-      <div className="overflow-x-auto pb-2">
-        <div className="flex space-x-4">
-          {sortedProjects.reverse().map((project, index) => (
-            <div key={index} className="flex-shrink-0">
-              <ProjectCard project={project} />
-            </div>
-          ))}
-        </div>
+      <div className="container mx-auto grid grid-cols-3 gap-7">
+
+        {
+          sortedProjects.reverse().map((project, index) => (
+
+            <ProjectCard key={index} project={project} />
+
+          ))
+        }
+
       </div>
 
-      <div class="overflow-x-scroll horizontal-scroll mb-10 whitespace-nowrap">
+      {/* <div class="overflow-x-scroll horizontal-scroll mb-10 whitespace-nowrap">
         <div class="flex space-x-4 mb-10">
+          
           <div class="flex-shrink-0">
             <div class="bg-white min-h-[400px] min-w-[350px] rounded-xl overflow-hidden shadow-l">
               <img
@@ -55,6 +59,7 @@ const NewProjects = () => {
               </div>
             </div>
           </div>
+
           <div class="flex-shrink-0">
             <div class="bg-white min-h-[400px] min-w-[350px] rounded-xl overflow-hidden shadow-l">
               <img
@@ -85,6 +90,7 @@ const NewProjects = () => {
             </div>
           </div>
         </div>
+
         <div class="flex space-x-4 mb-10">
           <div class="flex-shrink-0">
             <div class="bg-white min-h-[400px] min-w-[350px] rounded-xl overflow-hidden shadow-l">
@@ -115,6 +121,7 @@ const NewProjects = () => {
               </div>
             </div>
           </div>
+
           <div class="flex-shrink-0">
             <div class="bg-white min-h-[400px] min-w-[350px] rounded-xl overflow-hidden shadow-l">
               <img
@@ -144,8 +151,10 @@ const NewProjects = () => {
               </div>
             </div>
           </div>
+
         </div>
-      </div>
+      </div> */}
+
     </div>
   );
 };
