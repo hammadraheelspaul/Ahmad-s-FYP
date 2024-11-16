@@ -84,6 +84,12 @@ const product = new mongoose.Schema(
       {
         user: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         amount: { type: Number, required: true },
+        status: { type: String, default: "pending"},
+        paymentRepiptURL: {
+          type: String,
+          default:
+            "https://icon-library.com/images/leaf-icon-png/leaf-icon-png-24.jpg",
+        },
       },
     ],
 

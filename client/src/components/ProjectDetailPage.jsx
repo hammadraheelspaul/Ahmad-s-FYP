@@ -16,14 +16,15 @@ import {
 import FAQ from "./faqComponent";
 
 import { ProjectsContext } from "../contexts/ProjectsProvider";
+import BackProjectForm from "./backProjectForm";
 
 
 
 
 const ProjectDetailPage = () => {
-  const { projects } = useContext(ProjectsContext);
+  const { projects, user } = useContext(ProjectsContext);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [amount, setAmount] = useState(0);
   const [activeTab, setActiveTab] = useState("description");
 
   const openModal = () => {
@@ -48,6 +49,7 @@ const ProjectDetailPage = () => {
   const project = projects.find(
     (p) => p._id.toString() === projectId.toString()
   );
+ 
 
   if (!project) {
     return <div>Project not found {projectId}</div>;
@@ -59,7 +61,7 @@ const ProjectDetailPage = () => {
     const fetchOwnerDetails = async () => {
       if (project?.createdBy) {
         const res = await axios.get(`http://localhost:5200/api/user/${project.createdBy}`);
-        console.log(res.data);
+        // console.log(res.data);
         setOwnerDetails(res.data);
       }
     }
@@ -73,7 +75,7 @@ const ProjectDetailPage = () => {
       100
     );
 
-    console.log(project?.projectDetails?.perks,  project?.projectDetails?.FAQs);
+    // console.log(project?.projectDetails?.perks,  project?.projectDetails?.FAQs);
 
     return (
       <div className="w-full border-2 rounded-full bg-gray-200 overflow-hidden mt-4">
@@ -179,40 +181,7 @@ const ProjectDetailPage = () => {
       </section>
       {
         isModalOpen && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
-            <div className="bg-white p-8 rounded-lg">
-              <h2 className="text-lg font-bold mb-4">
-                Enter amount you want to back
-              </h2>
-              <div className="flex items-center border border-gray-300 rounded-lg p-2 mb-4">
-                <span className="text-gray-600 mr-2">Rs</span>
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={handleChange}
-                  className="w-full outline-none"
-                  placeholder="Enter amount you want to back this project with"
-                  min={1}
-                  step={500}
-                />
-              </div>
-              <div className="flex justify-end">
-                <button
-                  onClick={closeModal}
-                  className="mr-2 border border-gray-300 px-4 py-2 rounded-lg"
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={handleSubmit}
-                  className="bg-indigo-500 text-white px-4 py-2 rounded-lg"
-                  disabled={amount <= 0}
-                >
-                  Confirm
-                </button>
-              </div>
-            </div>
-          </div>
+          <BackProjectForm closeModal={closeModal} projectId={projectId} userId={user._id}/>
         )
       }
       <section className="text-gray-600 body-font overflow-hidden">

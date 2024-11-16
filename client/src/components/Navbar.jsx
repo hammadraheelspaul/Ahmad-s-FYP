@@ -3,17 +3,21 @@ import { Link } from "react-router-dom";
 import { BsSearch } from "react-icons/bs";
 import { ProjectsContext } from "../contexts/ProjectsProvider";
 
+import { FaUserCircle } from "react-icons/fa";
+import ProfileMenu from "./profileMenu";
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, setUser, projects } = useContext(ProjectsContext);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const handleSearchInputChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
   return (
-    <div className="bg-gray-900 p-2  sticky top-0 z-[99999999999999] shadow-lg">
+    <div className="bg-gray-900 p-2 z-20  sticky top-0  shadow-lg">
       <div className="container mx-auto flex justify-between items-center py-4">
         <div className="font-mono font-extrabold text-[16px] hidden md:flex space-x-4 text-white">
           {/* Navigation links */}
@@ -53,31 +57,31 @@ const Header = () => {
             onChange={handleSearchInputChange}
           />
           <button
-            onClick={() => {}}
+            onClick={() => { }}
             className="px-4 py-2 bg-teal-500 text-white rounded-r-lg"
           >
             <BsSearch />
           </button>
           {/* User authentication */}
-          <div className="relative">
-            {user ? (
-              <div className="font-mono font-extrabold text-[16px] uppercase text-teal-500 px-3">
-                <span>HI {user.name}</span>
-                <button
-                  className="absolute -right-10 mt-6 w-[100px] text-xs text-teal-500 rounded hover:bg-red-700 transition duration-200 ease-in-out"
-                  onClick={() => setUser(null)}
+          <div className="">
+            {
+              user ? (
+                <div className="relative ml-3">
+                  <FaUserCircle onClick={() => { setShowProfileMenu(!showProfileMenu) }} className="text-4xl text-teal-500" />
+                </div>
+              ) : (
+                <Link
+                  to="/signin"
+                  className="font-mono font-extrabold text-[16px] bg-teal-500 rounded hover:scale-105 uppercase ml-3 px-3 py-2"
                 >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <Link
-                to="/signin"
-                className="font-mono font-extrabold text-[16px] hover:text-teal-500 uppercase px-3"
-              >
-                Log in
-              </Link>
-            )}
+                  Log in
+                </Link>
+              )
+            }
+            {
+              showProfileMenu && user &&
+              <ProfileMenu user={user} setUser={setUser} setShowProfileMenu={setShowProfileMenu} />
+            }
           </div>
         </div>
       </div>
@@ -97,9 +101,8 @@ const Header = () => {
       </div>
       {/* Mobile menu */}
       <div
-        className={`md:hidden ${
-          isMenuOpen ? "flex flex-col items-center" : "hidden"
-        }`}
+        className={`md:hidden ${isMenuOpen ? "flex flex-col items-center" : "hidden"
+          }`}
       >
         {/* Mobile navigation links */}
         <Link

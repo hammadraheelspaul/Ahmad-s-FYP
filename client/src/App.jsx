@@ -16,8 +16,11 @@ import {
   AboutUs,
   Search,
   Campaign,
+  MyProjects,
+  BackedProjects
   
 } from "./pages";
+
 import CheckoutPage from "./pages/CheckoutPage";
 import { ProjectsProvider } from "../src/contexts/ProjectsProvider";
 import CreateProjectPage from "./pages/CreateProjectPage";
@@ -119,6 +122,25 @@ export default function App() {
                   <ForgetPassPage />
                 </>
               }
+            />
+
+            <Route 
+              path="/myProjects"
+              element ={
+                <>
+                  <MyProjects />
+                </>
+              }
+            
+            />
+            <Route 
+              path="/backedProjects"
+              element ={
+                <>
+                  <BackedProjects />
+                </>
+              }
+            
             />
           </Routes>
         </Router>

@@ -55,3 +55,37 @@ exports.getProjectRewards = async (req, res) => {
   if (!rewards) return res.status(404).send('No rewards found for this project');
   res.send(rewards);
 };
+
+exports.addBacker = async (req, res) => {
+  const { id } = req.params; // Project ID
+  const { userId, amount, paymentReceiptURL } = req.body;
+
+  // Validate input
+  if (!userId || !amount || amount <= 0 || !paymentReceiptURL) {
+    return res.status(400).send({ error: "All fields are required and amount must be greater than 0." });
+  }
+
+  try {
+    // Find the project
+    const project = await Project.findById(id);
+    if (!project) {
+      return res.status(404).send({ error: "Project not found." });
+    }
+
+    // Add the backer
+    project.backers.push({
+      user: userId,
+      amount,
+      paymentRepiptURL: paymentReceiptURL,
+      status: "pending", // Default status
+    });
+
+    // Save the project
+    await project.save();
+
+    res.status(201).send({ message: "Backer added successfully.", project });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: "An error occurred while adding the backer." });
+  }
+};
