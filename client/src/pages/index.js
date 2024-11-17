@@ -4,6 +4,8 @@ import AboutUs from "./AboutUs";
 import Campaign from "./Campaign";
 import MyProjects from "./MyProjects";
 import BackedProjects from "./backedProject";
+import AdminDashBoard from "./adminDashboard";
+
 
 // import ContributePage from "./SeeDetail";
 
@@ -13,5 +15,5 @@ import SignInPage from "./Auth/SignInPage";
 import SignUpPage from "./Auth/SignUpPage";
 import ForgetPassPage from "./Auth/ForgetPassPage";
 
-export { HomePage, SignInPage, SignUpPage, ForgetPassPage,AboutUs, Search, Campaign, MyProjects, BackedProjects }
+export { HomePage, SignInPage, SignUpPage, ForgetPassPage,AboutUs, Search, Campaign, MyProjects, BackedProjects, AdminDashBoard }
 

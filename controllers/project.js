@@ -89,3 +89,79 @@ exports.addBacker = async (req, res) => {
     res.status(500).send({ error: "An error occurred while adding the backer." });
   }
 };
+
+
+exports.confirmBackerStatus = async (req, res) => {
+  try {
+    const { projectId, index } = req.params; // Get projectId and index from request parameters
+
+    // Find the project by ID
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Validate the index
+    if (index < 0 || index >= project.backers.length) {
+      return res.status(400).json({ error: 'Invalid backer index' });
+    }
+
+    // Update the status of the specified backer
+    const backer = project.backers[index];
+    if (backer.status === 'confirmed' || backer.status === 'declined') {
+      return res.status(400).json({ error: 'Status not pending.' });
+    }
+    backer.status = 'confirmed';
+
+    // Add the backer's amount to the collectedAmount
+    project.collectedAmount = (project.collectedAmount || 0) + backer.amount;
+
+    // Save the updated project
+    await project.save();
+
+    res.status(200).json({
+      message: `Backer status updated to 'confirmed' and amount added to collectedAmount`,
+      project,
+    });
+  } catch (error) {
+    console.error('Error updating backer status:', error);
+    res.status(500).json({ error: 'An error occurred while updating backer status' });
+  }
+};
+
+exports.declineBackerStatus = async (req, res) => {
+  try {
+    const { projectId, index } = req.params; // Get projectId and index from request parameters
+
+    // Find the project by ID
+    const project = await Project.findById(projectId);
+
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    // Validate the index
+    if (index < 0 || index >= project.backers.length) {
+      return res.status(400).json({ error: 'Invalid backer index' });
+    }
+
+    // Update the status of the specified backer
+    const backer = project.backers[index];
+    if (backer.status === 'confirmed' || backer.status === 'declined') {
+      return res.status(400).json({ error: 'Status not pending.' });
+    }
+    backer.status = 'declined';
+
+    // Save the updated project
+    await project.save();
+
+    res.status(200).json({
+      message: `Backer status updated to 'confirmed' and amount added to collectedAmount`,
+      project,
+    });
+  } catch (error) {
+    console.error('Error updating backer status:', error);
+    res.status(500).json({ error: 'An error occurred while updating backer status' });
+  }
+};

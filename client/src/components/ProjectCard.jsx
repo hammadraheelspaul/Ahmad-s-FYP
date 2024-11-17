@@ -1,29 +1,10 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { ProjectsContext } from "../contexts/ProjectsProvider";
-import axios from "axios";
-
 
 const ProjectCard = ({ project }) => {
-  
-  const [showConfirmDelete, setShowConfirmDelete] = useState(false);
-  
+    
   const collectedPercentage = (project.collectedAmount / project.neededAmount) * 100;
-
-  const { user } = useContext(ProjectsContext);
-
-
-  const handleDeleteProject = async () =>{
-    console.log("Delete function fired")
-    try {
-      await axios.delete(`http://localhost:5200/api/projects/${project._id}`)
-      location.reload();
-    } catch (error) {
-      console.log("Error Deleting Project: ", error);
-    }
-   
-  }
 
   return (
     <div className="bg-white w-[300px] md:w-[400px] rounded-xl overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105">
@@ -67,21 +48,6 @@ const ProjectCard = ({ project }) => {
             style={{ width: `${collectedPercentage}%` }}
           ></div>
         </div>
-
-        {
-          !showConfirmDelete && user && project?.createdBy && project.createdBy === user._id &&
-          <button onClick={()=>{setShowConfirmDelete(true)}} className='bg-red-600 ml-auto text-white px-5 py-2  rounded-md hover:scale-105'>
-            Delete
-          </button>
-        }
-        {
-          showConfirmDelete &&
-          <div className='flex items-center'>
-            <div className="text-red-600 font-bold">Confirm Delete</div>
-           <button onClick={()=>{handleDeleteProject()}} className='text-red-500 border border-red-500 ml-auto px-5 py-2  rounded-md hover:scale-105 hover:bg-red-500 hover:text-white'>Delete</button>
-           <button onClick={()=>{setShowConfirmDelete(false)}} className='bg-green-600 ml-auto text-white px-5 py-2  rounded-md hover:scale-105'>Cancel</button>
-          </div>
-        }
 
       </div>
 

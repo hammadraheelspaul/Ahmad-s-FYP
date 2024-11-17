@@ -17,7 +17,8 @@ import {
   Search,
   Campaign,
   MyProjects,
-  BackedProjects
+  BackedProjects,
+  AdminDashBoard
   
 } from "./pages";
 
@@ -128,6 +129,7 @@ export default function App() {
               path="/myProjects"
               element ={
                 <>
+                  <Navbar />
                   <MyProjects />
                 </>
               }
@@ -137,7 +139,18 @@ export default function App() {
               path="/backedProjects"
               element ={
                 <>
+                  <Navbar />
                   <BackedProjects />
+                </>
+              }
+            
+            />
+             <Route 
+              path="/adminDashBoard"
+              element ={
+                <>
+                  <Navbar />
+                  <AdminDashBoard />
                 </>
               }
             

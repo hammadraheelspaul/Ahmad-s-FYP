@@ -49,7 +49,7 @@ const ProjectDetailPage = () => {
   const project = projects.find(
     (p) => p._id.toString() === projectId.toString()
   );
- 
+
 
   if (!project) {
     return <div>Project not found {projectId}</div>;
@@ -155,12 +155,26 @@ const ProjectDetailPage = () => {
                 </div>
               </div>
               <div className="flex space-x-4">
-                <button
-                  onClick={openModal}
-                  className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
-                >
-                  Back this project
-                </button>
+                {
+                  user ? (
+
+                    <button
+                      onClick={openModal}
+                      className="text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                    >
+                      Back this project
+                    </button>
+
+                  ) : (
+                    <button
+                      onClick={openModal}
+                      className="text-white bg-slate-400 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded"
+                    >
+                      Login to back this project
+                    </button>
+                  )
+                }
+                
                 <button className="rounded-full w-10 h-10 bg-gray-200 p-0 border-2 border-gray-300 inline-flex items-center justify-center text-gray-500 hover:bg-gray-300 hover:border-gray-400 transition duration-300">
                   <svg
                     fill="none"
@@ -180,8 +194,8 @@ const ProjectDetailPage = () => {
         </div>
       </section>
       {
-        isModalOpen && (
-          <BackProjectForm closeModal={closeModal} projectId={projectId} userId={user._id}/>
+        isModalOpen && user && (
+          <BackProjectForm closeModal={closeModal} projectId={projectId} userId={user._id} />
         )
       }
       <section className="text-gray-600 body-font overflow-hidden">
@@ -273,13 +287,13 @@ const ProjectDetailPage = () => {
             <div className="text-3xl font-bold text-slate-600">{ownerDetails.name}</div>
             <div className="h-px mt-2 bg-slate-200 rounded-full" />
             <div className="flex items-center space-x-4 text-xl ">
-            <div><CiMail /></div>
-            <div>{ownerDetails.email}</div>
+              <div><CiMail /></div>
+              <div>{ownerDetails.email}</div>
             </div>
             <div className="h-px mt-2 bg-slate-200 rounded-full" />
             <div className="flex items-center space-x-4 text-xl ">
-            <div><CiPhone /></div>
-            <div>{ownerDetails.phone}</div>
+              <div><CiPhone /></div>
+              <div>{ownerDetails.phone}</div>
             </div>
             <div className="h-px mt-2 bg-slate-200 rounded-full" />
 
