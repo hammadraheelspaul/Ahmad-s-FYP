@@ -1,3 +1,3 @@
 
 
-export default ['test@whatever.com', 'ahmad.nazreen97@gmail.com'];
+export default ['test@whatever.com', 'ahmed.nazreen97@gmail.com'];
