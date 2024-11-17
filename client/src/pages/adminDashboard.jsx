@@ -65,7 +65,7 @@ function LocalProjectCard({ project, user }) {
 
     const handleConfirmBacker = async (index) => {
         try {
-            await axios.put(`http://localhost:5200/api/project/${project._id}/backer/${index}/decline`);
+            await axios.put(`http://localhost:5200/api/project/${project._id}/backer/${index}/confirm`);
             alert("status updated!")
         } catch (error) {
             console.log(error);
@@ -74,7 +74,7 @@ function LocalProjectCard({ project, user }) {
 
     const handleDeclineBacker = async(index)=>{
         try {
-            await axios.put(`http://localhost:5200/api/project/${project._id}/backer/${index}/confirm`)
+            await axios.put(`http://localhost:5200/api/project/${project._id}/backer/${index}/decline`)
             alert("status updated!")
         } catch (error) {
             console.log(error);
@@ -176,13 +176,13 @@ function LocalProjectCard({ project, user }) {
                                 <div className="flex justify-between p-5">
 
                                     <button onClick={() => handleDeclineBacker(index)}
-                                        disabled={backer.status === 'confirmed'}
+                                        disabled={backer.status != 'pending'}
                                         className="bg-yellow-500 px-3 py-2 rounded disabled:bg-slate-300">
                                         Decline
                                     </button>
 
                                     <button onClick={() => handleConfirmBacker(index)} className="bg-green-500 px-3 py-2 rounded disabled:bg-slate-300"
-                                        disabled={backer.status === 'confirmed'}
+                                        disabled={backer.status != 'pending'}
                                     >
                                         Confirm
                                     </button>
