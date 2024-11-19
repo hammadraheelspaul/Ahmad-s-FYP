@@ -10,14 +10,14 @@ import axios from "axios";
 export default function AdminDashBoard() {
     const { projects, user } = useContext(ProjectsContext);
 
-    if(!user || !admins.includes(user.email)){
-        return(
+    if (!user || !admins.includes(user.email)) {
+        return (
             <LoggeInRequired />
         )
     }
 
     const backedProjects = projects.filter((project) => project.backers.length > 0);
-    console.log(backedProjects);
+    // console.log(backedProjects);
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
@@ -45,23 +45,52 @@ function LocalProjectCard({ project, user }) {
     const collectedPercentage = (project.collectedAmount / project.neededAmount) * 100;
 
     const [backersDetails, setBackersDetails] = useState([]);
-    const [loadingStatus, setloadingStatus] = useState(0);
+
+    //for debugging.
+    // useEffect(() => {
+    //     console.log("backer details: ", backersDetails);
+    //     console.log("beckersDetails Keys: ", Object.keys(backersDetails));
+    //     console.log("loading status: ", loadingStatus);
+    // }, [backersDetails, loadingStatus]);
+
     useEffect(() => {
         // console.log(project.title);
-        const fetchAndSetBackersDetails = async (userID) => {
-            const response = await axios.get(`http://localhost:5200/api/user/${userID}`);
-            const details = await response.data;
-            // console.log(details);
-            // console.log(details.name, details.email, details.phone);
-            setBackersDetails([...backersDetails, { name: details.name, email: details.email, phone: details.phone }]);
-            setloadingStatus(loadingStatus + 1);
+        const fetchAndSetBackersDetails = async (userID, index) => {
+
+            try {
+                const response = await axios.get(`http://localhost:5200/api/user/${userID}`);
+                const details = await response.data;
+                // console.log(details);
+                // console.log(details.name, details.email, details.phone);
+                setBackersDetails((prevDetails) => {
+                    const updatedDetails = [...prevDetails];
+                    updatedDetails[index] = {
+                        name: details.name,
+                        email: details.email,
+                        phone: details.phone,
+                    };
+                    return updatedDetails;
+                });
+
+            } catch (error) {
+                setBackersDetails((prevDetails) => {
+                    const updatedDetails = [...prevDetails];
+                    updatedDetails[index] = {
+                        name: 'not available',
+                        email: 'not available',
+                        phone: 'not available',
+                    };
+                    return updatedDetails;
+                });
+                console.log(error);
+            }
         }
 
         for (let i = 0; i < project.backers.length; i++) {
             // console.log("backer ", i, " user id: ", project.backers[i].user);
-            fetchAndSetBackersDetails(project.backers[i].user);
+            fetchAndSetBackersDetails(project.backers[i].user, i);
         }
-    }, [])
+    }, []);
 
     const handleConfirmBacker = async (index) => {
         try {
@@ -72,7 +101,7 @@ function LocalProjectCard({ project, user }) {
         }
     }
 
-    const handleDeclineBacker = async(index)=>{
+    const handleDeclineBacker = async (index) => {
         try {
             await axios.put(`http://localhost:5200/api/project/${project._id}/backer/${index}/decline`)
             alert("status updated!")
@@ -129,31 +158,39 @@ function LocalProjectCard({ project, user }) {
                     {
                         project.backers.map((backer, index) => (
                             <div key={index} className="bg-slate-100 p-2 rounded">
+                                
                                 <div className="font-bold text-xl text-center">Backer {index + 1}</div>
                                 <div className="flex space-x-1">
                                     <div className="font-bold">User id: </div>
                                     <div>{backer.user}</div>
                                 </div>
+                                
                                 <div className="font-bold text-center mt-3">Backer contact details</div>
                                 <div className="flex space-x-1">
                                     <div className="font-bold">User Name: </div>
                                     {
-                                        loadingStatus === project.backers.length &&
-                                        <div>{backersDetails[index].name}</div>
+                                        Object.keys(backersDetails).includes(`${index}`) ?
+                                            <div>{backersDetails[index].name}</div>
+                                            :
+                                            <div>Loading...</div>
                                     }
                                 </div>
                                 <div className="flex space-x-1">
                                     <div className="font-bold">User email: </div>
                                     {
-                                        loadingStatus === project.backers.length &&
-                                        <div>{backersDetails[index].email}</div>
+                                        Object.keys(backersDetails).includes(`${index}`) ?
+                                            <div>{backersDetails[index].email}</div>
+                                            :
+                                            <div>Loading...</div>
                                     }
                                 </div>
                                 <div className="flex space-x-1">
                                     <div className="font-bold">User Phone: </div>
                                     {
-                                        loadingStatus === project.backers.length &&
-                                        <div>{backersDetails[index].phone}</div>
+                                        Object.keys(backersDetails).includes(`${index}`) ?
+                                            <div>{backersDetails[index].phone}</div>
+                                            :
+                                            <div>Loading...</div>
                                     }
                                 </div>
 
